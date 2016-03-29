@@ -63,7 +63,6 @@ class ViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsContr
             
             self.navigationController!.pushViewController(controller, animated: true)
         }
-        print("Selected")
     }
     
     func addAnnotations(pins: [Pin]) {

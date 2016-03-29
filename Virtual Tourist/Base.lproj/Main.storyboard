@@ -108,6 +108,7 @@
                     <connections>
                         <outlet property="collectionView" destination="ko7-NU-lES" id="Isb-UJ-bFa"/>
                         <outlet property="flowLayout" destination="rW7-s8-u28" id="GzE-Ln-K4N"/>
+                        <outlet property="map" destination="s2H-Sq-wof" id="oUN-oe-CT1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Md-ip-QaE" userLabel="First Responder" sceneMemberID="firstResponder"/>

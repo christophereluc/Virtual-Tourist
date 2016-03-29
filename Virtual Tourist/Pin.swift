@@ -13,7 +13,7 @@ import CoreData
 
 class Pin: NSManagedObject {
     
-    @NSManaged var photos : NSOrderedSet
+    @NSManaged var photos : NSMutableOrderedSet
     @NSManaged var latitude: Double
     @NSManaged var longitude: Double
         
@@ -34,7 +34,7 @@ class Pin: NSManagedObject {
         // dictionary. This works in the same way that it did before we started on Core Data
         latitude = coordinate.latitude
         longitude = coordinate.longitude
-        photos = NSOrderedSet()
+        photos = NSMutableOrderedSet()
     }
     
     var coordinate: CLLocationCoordinate2D {
