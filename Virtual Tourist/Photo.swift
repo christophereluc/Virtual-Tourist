@@ -18,6 +18,7 @@ class Photo: NSManagedObject {
     
     @NSManaged var url: String
     @NSManaged var pin: Pin
+    @NSManaged var imageId: String
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
@@ -31,6 +32,14 @@ class Photo: NSManagedObject {
         
         self.url = photoURL
         self.pin = pin
+        
+        let imageUrl = NSURL(string: url)
+        imageId = imageUrl!.lastPathComponent!.stringByReplacingOccurrencesOfString(".jpg", withString: "")
+    }
+    
+    override func prepareForDeletion() {
+        photo = nil
+        super.prepareForDeletion()
     }
     
     var photo: UIImage? {
