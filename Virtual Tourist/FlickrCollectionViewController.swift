@@ -22,11 +22,7 @@ class FlickrCollectionViewController: UIViewController, UICollectionViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let flow = UICollectionViewFlowLayout()
-        collectionView.collectionViewLayout = flow
-        collectionView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0)
-        flow.minimumInteritemSpacing = 1.0
-        flow.minimumLineSpacing = 1.0
+        adjustFlowLayout(self.view.frame.size)
         
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
@@ -38,6 +34,15 @@ class FlickrCollectionViewController: UIViewController, UICollectionViewDataSour
         } catch {}
         
         fetchedResultsController.delegate = self
+    }
+    
+    func adjustFlowLayout(size: CGSize) {
+        let space: CGFloat = 1.5
+        let dimension:CGFloat = size.width >= size.height ? (size.width - (5 * space)) / 6.0 :  (size.width - (2 * space)) / 3.0
+        
+        flowLayout.minimumInteritemSpacing = space
+        flowLayout.minimumLineSpacing = space
+        flowLayout.itemSize = CGSizeMake(dimension, dimension)
     }
     
     // MARK: - Core Data Convenience
