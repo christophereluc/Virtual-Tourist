@@ -210,6 +210,16 @@ class APIClient : NSObject {
         
         var randomPage = 1
         
+        //I knew I wasn't crazy and that my queries were correct.
+        //This is a result of a limit on Flickr
+        //https://discussions.udacity.com/t/virtualtourist-why-is-flickr-returning-the-same-photos/30977/9
+        //https://discussions.udacity.com/t/virtual-tourist-flickr-api-random-page-problem/45977/7
+        //This upper bound ensures that Flickr will actually return a distinct set of photos.  See second to last comment
+        //in above link.
+        if totalPages > 190 {
+            totalPages = 190
+        }
+        
         if totalPages > 0 {
             randomPage = Int(arc4random_uniform(UInt32(totalPages))) + 1
         }
