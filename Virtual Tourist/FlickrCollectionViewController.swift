@@ -28,7 +28,7 @@ class FlickrCollectionViewController: UIViewController, UICollectionViewDataSour
         self.collectionView.delegate = self
         setupMap()
         placePin()
-
+        
         do {
             try fetchedResultsController.performFetch()
         } catch {}
@@ -57,7 +57,7 @@ class FlickrCollectionViewController: UIViewController, UICollectionViewDataSour
         
         let fetchRequest = NSFetchRequest(entityName: "Photo")
         
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "url", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "imageId", ascending: true)]
         fetchRequest.predicate = NSPredicate(format: "pin == %@", self.pin);
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
@@ -115,10 +115,12 @@ class FlickrCollectionViewController: UIViewController, UICollectionViewDataSour
             cell.imageView!.image = UIImage(named: "Photo")
             APIClient.sharedInstance().taskForGETImage(photo.url, completionHandlerForImage: { (imageData, error) in
                 if let image = UIImage(data: imageData!) {
-                    photo.photo = image
+                    
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
                         //Now make sure that the cell is still in view (so we don't update wrong cell)
                         if let cellToUpdate = collectionView.cellForItemAtIndexPath(indexPath) as? FlickrImageViewCell {
+                            photo.photo = image
                             cellToUpdate.imageView?.image = image
                             cell.activityIndicator.hidden = true
                             cell.activityIndicator.stopAnimating()
@@ -197,13 +199,17 @@ class FlickrCollectionViewController: UIViewController, UICollectionViewDataSour
         
         APIClient.sharedInstance().getImageURLS(pin) {
             success, error in
-            if success {
-                dispatch_async(dispatch_get_main_queue(), {
+            dispatch_async(dispatch_get_main_queue(), {
+                if success {
+                    
                     CoreDataStackManager.sharedInstance().saveContext()
                     sender.enabled = true
                     self.collectionView.reloadData()
-                })
-            }
+                }
+                else {
+                    sender.enabled = true
+                }
+            })
         }
     }
 }

@@ -45,7 +45,7 @@ class ImageCache {
         // If the image is nil, remove images from the cache
         if image == nil {
             inMemoryCache.removeObjectForKey(path)
-            
+            print(path)
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(path)
             } catch _ {}

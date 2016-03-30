@@ -23,7 +23,9 @@ extension APIClient {
             FlickrParameterKeys.SafeSearch: FlickrParameterValues.UseSafeSearch,
             FlickrParameterKeys.Extras: FlickrParameterValues.MediumURL,
             FlickrParameterKeys.Format: FlickrParameterValues.ResponseFormat,
-            FlickrParameterKeys.NoJSONCallback: FlickrParameterValues.DisableJSONCallback
+            FlickrParameterKeys.NoJSONCallback: FlickrParameterValues.DisableJSONCallback,
+            FlickrParameterKeys.PerPage : FlickrParameterValues.PerPage,
+            FlickrParameterKeys.Page : String(getRandomPage())
         ]
         
         /* 2. Make the request */
@@ -51,27 +53,31 @@ extension APIClient {
                     completionHandlerForImages(result: false, error: error)
                     return
                 }
+                if let pages = photosDictionary[FlickrResponseKeys.Pages] as? Int {
+                    self.totalPages = pages
+                }
                 
                 if photosArray.count == 0 {
                     completionHandlerForImages(result: false, error: error)
                     return
                 } else {
-                    for photo in photosArray{
-                        if let url = photo[FlickrResponseKeys.MediumURL] as? String {
-                            
-                            //...create a new Photo managed object with it...
-                            let newPhoto = Photo(photoURL: url, pin: pin, context: self.sharedContext)
-                            pin.photos.addObject(newPhoto)
-
+                    self.sharedContext.performBlockAndWait({
+                        for photo in photosArray{
+                            if let url = photo[FlickrResponseKeys.MediumURL] as? String, let id = photo[FlickrResponseKeys.Id] as? String {
+                                
+                                //...create a new Photo managed object with it...
+                                let newPhoto = Photo(photoURL: url, pin: pin, id: id, context: self.sharedContext)
+                                pin.photos.addObject(newPhoto)
+                                
+                            }
                         }
-                    }
-                    completionHandlerForImages(result: true, error: nil)
-                    
+                        completionHandlerForImages(result: true, error: nil)
+                    })
                 }
             }
         }
     }
-        
+    
     private func bboxString(latitude: Double, longitude: Double) -> String {
         // ensure bbox is bounded by minimum and maximums
         let minimumLon = max(longitude - Constants.SearchBBoxHalfWidth, Constants.SearchLonRange.0)

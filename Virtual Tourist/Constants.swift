@@ -35,6 +35,7 @@ extension APIClient {
             static let Text = "text"
             static let BoundingBox = "bbox"
             static let Page = "page"
+            static let PerPage = "per_page"
         }
         
         // MARK: Flickr Parameter Values
@@ -46,6 +47,7 @@ extension APIClient {
             static let GalleryID = "5704-72157622566655097"
             static let MediumURL = "url_m"
             static let UseSafeSearch = "1"
+            static let PerPage = "20"
         }
         
         // MARK: Flickr Response Keys
@@ -57,8 +59,9 @@ extension APIClient {
             static let MediumURL = "url_m"
             static let Pages = "pages"
             static let Total = "total"
+            static let Id = "id"
         }
-        
+    
         // MARK: Flickr Response Values
         struct FlickrResponseValues {
             static let OKStatus = "ok"

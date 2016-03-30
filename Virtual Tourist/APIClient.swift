@@ -10,6 +10,8 @@ import Foundation
 
 class APIClient : NSObject {
     
+    var totalPages: Int = 0
+    
     // MARK: Properties
     
     // shared session
@@ -202,6 +204,17 @@ class APIClient : NSObject {
         }
         
         return components.URL!
+    }
+    
+    func getRandomPage() -> Int {
+        
+        var randomPage = 1
+        
+        if totalPages > 0 {
+            randomPage = Int(arc4random_uniform(UInt32(totalPages))) + 1
+        }
+        
+        return randomPage
     }
     
     // MARK: Shared Instance

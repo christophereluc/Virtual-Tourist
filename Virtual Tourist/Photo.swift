@@ -24,7 +24,7 @@ class Photo: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    init(photoURL: String, pin: Pin, context: NSManagedObjectContext) {
+    init(photoURL: String, pin: Pin, id: String, context: NSManagedObjectContext) {
         
         //Core Data
         let entity = NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
@@ -32,24 +32,21 @@ class Photo: NSManagedObject {
         
         self.url = photoURL
         self.pin = pin
-        
-        let imageUrl = NSURL(string: url)
-        imageId = imageUrl!.lastPathComponent!.stringByReplacingOccurrencesOfString(".jpg", withString: "")
+        self.imageId = id
     }
     
     override func prepareForDeletion() {
         photo = nil
-        super.prepareForDeletion()
     }
     
     var photo: UIImage? {
         
         get {
-            return APIClient.Caches.imageCache.imageWithIdentifier(url)
+            return APIClient.Caches.imageCache.imageWithIdentifier(imageId)
         }
         
         set {
-            APIClient.Caches.imageCache.storeImage(newValue, withIdentifier: url)
+            APIClient.Caches.imageCache.storeImage(newValue, withIdentifier: imageId)
         }
     }
 }
